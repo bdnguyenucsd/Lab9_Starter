@@ -87,6 +87,15 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "bb9b6d9c4f06438ab5305fc9bd5584f8"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+    TrackJS.track('Testing TrackJS!');
+  </script>
+                        
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -102,6 +111,135 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    errorBtns[0].addEventListener('click', (e) => {
+      console.log("Console Log Demo");
+    });
+
+    errorBtns[1].addEventListener('click', (e) => {
+      console.error("Console Error Demo")
+    });
+
+    errorBtns[2].addEventListener('click', (e) => {
+      console.count("Count");
+    });
+
+    errorBtns[3].addEventListener('click', (e) => {
+      console.warn("Console Warn Demo");
+    });
+
+    errorBtns[4].addEventListener('click', (e) => {
+      let x = 5;
+      let y = 3;
+      let reason = 'x is expected to be less than y';
+      console.assert(x < y, {x, y, reason});
+    });
+
+    errorBtns[5].addEventListener('click', (e) => {
+      console.clear();
+    });
+
+    errorBtns[6].addEventListener('click', (e) => {
+      console.dir(document.body);
+    });
+
+    errorBtns[7].addEventListener('click', (e) => {
+      console.dirxml(document);
+    });
+
+    errorBtns[8].addEventListener('click', (e) => {
+      let label = "Group";
+      console.group(label);
+    });
+
+    errorBtns[9].addEventListener('click', (e) => {
+      console.groupEnd('Group');
+    });
+
+    errorBtns[10].addEventListener('click', (e) => {
+      console.table([
+        {
+          first: null,
+          middle: '####',
+          last: null,
+        },
+        {
+          first: "####",
+          middle: "####",
+          last: "####"
+        },
+      ]);
+    });
+
+    errorBtns[11].addEventListener('click', (e) => {
+      console.time();
+    });
+
+    errorBtns[12].addEventListener('click', (e) => {
+      console.timeEnd();
+    });
+
+    errorBtns[13].addEventListener('click', (e) => {
+      let firstFunc = () => { secondFunc(); };
+      let secondFunc = () => { thirdFunc(); };
+      let thirdFunc = () => { fourthFunc(); };
+      let fourthFunc = () => { console.trace() };
+      firstFunc();
+    });
+
+    errorBtns[14].addEventListener('click', (e) => {
+      someBadFunction();
+    })
+
+    class SomeError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = 'SomeError';
+      }
+    }
+
+    function testCustomError(json) {
+      let fieldObject = JSON.parse(json);
+      if (!fieldObject.Field2) {
+        throw new SomeError("No field: Field2");
+      }
+
+      return fieldObject;
+    }
+
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      let message = [
+       'Message: ' + msg,
+       'URL: ' + url,
+       'Line: ' + lineNo,
+       'Column: ' + columnNo,
+       'Error: ' + error
+      ];
+      console.error(message);
+
+      return false;
+    }
+
+    try {
+      let testObject = testCustomError('{ "Field1": 25 }');
+    } catch (error) {
+      if (error instanceof SomeError) {
+        console.error("Some Error: " + error.message);
+      } else if (error instanceof SyntaxError) {
+        console.error("Syntax Error: " + error.message);
+      } else {
+        throw error;
+      }
+    }
+
+    try {
+      JSON.parse('{ somereallybadjsonfilethatlooksverylong }')
+    } catch (error) {
+      console.error(error.name);
+    } finally {
+      console.log('We reached the finally clause');
+    }
+
   </script>
 </body>
 
